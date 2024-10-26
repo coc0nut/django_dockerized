@@ -1,0 +1,28 @@
+
+services:
+
+  postgresql:
+    image: postgres:17.0-alpine3.20
+    container_name: "postgresql"
+    environment:
+      POSTGRES_DB: django
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: db-pass-123
+    ports: 
+      - '5423:5432'
+    restart: unless-stopped
+    hostname: postgresql
+
+
+  django:
+    build: ./django
+    image: cas/django
+    container_name: "django"
+    volumes:
+      - ./django/app:/app
+    ports:
+      - 8000:8000
+    restart: always
+    hostname: django
+    depends_on:
+      - postgresql
